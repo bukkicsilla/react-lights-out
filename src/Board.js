@@ -34,15 +34,26 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
   function createBoard() {
     let initialBoard = [];
     // TODO: create array-of-arrays of true/false values
+    for (let i = 0; i < nrows; i++) {
+      let row = [];
+      for (let j = 0; j < ncols; j++) {
+        row.push(Math.random() < chanceLightStartsOn);
+      }
+      initialBoard.push(row);
+    }
+    console.log(initialBoard);
     return initialBoard;
   }
 
   function hasWon() {
     // TODO: check the board in state to determine whether the player has won.
+    const result = board.every((row) => row.every((cell) => cell));
+    console.log(result);
+    return board.every((row) => row.every((cell) => cell));
   }
 
   function flipCellsAround(coord) {
-    setBoard(oldBoard => {
+    setBoard((oldBoard) => {
       const [y, x] = coord.split("-").map(Number);
 
       const flipCell = (y, x, boardCopy) => {
@@ -54,20 +65,39 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
       };
 
       // TODO: Make a (deep) copy of the oldBoard
-
+      const boardCopy = oldBoard.map((row) => [...row]);
       // TODO: in the copy, flip this cell and the cells around it
-
+      flipCell(y, x, boardCopy);
+      flipCell(y, x - 1, boardCopy);
+      flipCell(y, x + 1, boardCopy);
+      flipCell(y - 1, x, boardCopy);
+      flipCell(y + 1, x, boardCopy);
       // TODO: return the copy
+      return boardCopy;
     });
   }
 
-  // if the game is won, just show a winning msg & render nothing else
-
-  // TODO
-
-  // make table board
-
-  // TODO
+  return (
+    // if the game is won, just show a winning msg & render nothing else
+    <div className="Board">
+      {hasWon() && <h1>You Won</h1>}
+      {!hasWon() && (
+        <table className="Board-table">
+          {board.map((row, y) => (
+            <tr key={y}>
+              {row.map((col, x) => (
+                <Cell
+                  key={`${y}-${x}`}
+                  isLit={col}
+                  flipCellsAroundMe={() => flipCellsAround(`${y}-${x}`)}
+                />
+              ))}
+            </tr>
+          ))}
+        </table>
+      )}
+    </div>
+  );
 }
 
 export default Board;

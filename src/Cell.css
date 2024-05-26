@@ -1,10 +1,19 @@
 .Cell {
   height: 100px;
   width: 100px;
-  background-color: darkgray;
+  background-color: skyblue;
   cursor: pointer;
+  border-radius: 42px;
+  border: 1px solid forestgreen;
+  display: inline-block;
+  transition: background-color 0.5s ease;
 }
-
+.Cell:hover {
+  background-color: rgb(200, 233, 233);
+}
 .Cell-lit {
-  background-color: white;
+  background-color: yellow;
+}
+.Cell-lit:hover {
+  background-color: lightyellow;
 }
