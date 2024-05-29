@@ -27,7 +27,7 @@ import "./Board.css";
  *
  **/
 
-function Board({ nrows = 3, ncols = 3, chanceLightStartsOn = 0.5 }) {
+function Board({ nrows = 3, ncols = 3, chanceLightStartsOn = 0.6 }) {
   const [board, setBoard] = useState(createBoard());
 
   /** create a board nrows high/ncols wide, each cell randomly lit or unlit */
@@ -41,15 +41,13 @@ function Board({ nrows = 3, ncols = 3, chanceLightStartsOn = 0.5 }) {
       }
       initialBoard.push(row);
     }
-    console.log(initialBoard);
     return initialBoard;
   }
 
   function hasWon() {
     // TODO: check the board in state to determine whether the player has won.
     const result = board.every((row) => row.every((cell) => cell));
-    console.log(result);
-    return board.every((row) => row.every((cell) => cell));
+    return board.every((row) => row.every((cell) => !cell));
   }
 
   function flipCellsAround(coord) {
@@ -80,20 +78,22 @@ function Board({ nrows = 3, ncols = 3, chanceLightStartsOn = 0.5 }) {
   return (
     // if the game is won, just show a winning msg & render nothing else
     <div className="Board">
-      {hasWon() && <h1>You Won</h1>}
+      {hasWon() && <h1>You Win!</h1>}
       {!hasWon() && (
         <table className="Board-table">
-          {board.map((row, y) => (
-            <tr key={y}>
-              {row.map((col, x) => (
-                <Cell
-                  key={`${y}-${x}`}
-                  isLit={col}
-                  flipCellsAroundMe={() => flipCellsAround(`${y}-${x}`)}
-                />
-              ))}
-            </tr>
-          ))}
+          <tbody>
+            {board.map((row, y) => (
+              <tr key={y}>
+                {row.map((col, x) => (
+                  <Cell
+                    key={`${y}-${x}`}
+                    isLit={col}
+                    flipCellsAroundMe={() => flipCellsAround(`${y}-${x}`)}
+                  />
+                ))}
+              </tr>
+            ))}
+          </tbody>
         </table>
       )}
     </div>
